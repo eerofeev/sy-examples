@@ -27,7 +27,13 @@ public class ConverterImpl implements Converter {
 			response.setAmount(0);
 		}
 		response.setCurrencyCode(request.getCurrencyCodeTo());
-		test();
+		//test();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return response;
 	}
 

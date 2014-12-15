@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://currencyconverter.simulation.fsw_poc.bva.at/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
+	name="Converter" targetNamespace="http://currencyconverter.simulation.fsw_poc.bva.at/">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://currencyconverter.simulation.fsw_poc.bva.at/"
+			elementFormDefault="unqualified"
+			targetNamespace="http://currencyconverter.simulation.fsw_poc.bva.at/"
+			version="1.0">
+			<xs:element name="convert" type="tns:convert" />
+			<xs:element name="convertResponse" type="tns:convertResponse" />
+			<xs:complexType name="convert">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="converterRequest" type="tns:request" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="request">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="currencyCodeFrom" type="tns:code" />
+					<xs:element minOccurs="0" name="currencyCodeTo" type="tns:code" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="convertResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="converterResponse" type="tns:response" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="response">
+				<xs:sequence>
+					<xs:element name="amount" type="xs:double" />
+					<xs:element minOccurs="0" name="currencyCode" type="tns:code" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="code">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="EUR" />
+					<xs:enumeration value="USD" />
+					<xs:enumeration value="CAD" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="convertResponse">
+		<wsdl:part element="tns:convertResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="convert">
+		<wsdl:part element="tns:convert" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="Converter">
+		<wsdl:operation name="convert">
+			<wsdl:input message="tns:convert" name="convert">
+			</wsdl:input>
+			<wsdl:output message="tns:convertResponse" name="convertResponse">
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ConverterSoapBinding" type="tns:Converter">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="convert">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="convert">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="convertResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="Converter">
+		<wsdl:port binding="tns:ConverterSoapBinding" name="ConverterImplPort">
+			<soap:address location="http://localhost:8080/sy-poc-simulation/Converter" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sy:switchyard xmlns:bean="urn:switchyard-component-bean:config:1.1" xmlns:camel="urn:switchyard-component-camel:config:1.1" xmlns:http="urn:switchyard-component-http:config:1.1" xmlns:resteasy="urn:switchyard-component-resteasy:config:1.1" xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912" xmlns:soap="urn:switchyard-component-soap:config:1.1" xmlns:sy="urn:switchyard-config:switchyard:1.1" xmlns:transform="urn:switchyard-config:transform:1.1" name="switchyard-wss" targetNamespace="http://switchyard_wss.examples.gepardec.com/">
+  <sca:composite name="switchyard-wss" targetNamespace="http://switchyard_wss.examples.gepardec.com/">
+    <sca:component name="CamelServiceRoute">
+      <camel:implementation.camel>
+        <camel:java class="com.gepardec.examples.switchyard_auditing.CamelServiceRoute"/>
+      </camel:implementation.camel>
+      <sca:service name="ConverterProxy">
+        <sca:interface.java interface="com.gepardec.examples.switchyard_auditing.ConverterProxy"/>
+      </sca:service>
+      <sca:reference name="ConverterProxyExt">
+        <sca:interface.java interface="com.gepardec.examples.switchyard_auditing.ConverterProxy"/>
+      </sca:reference>
+    </sca:component>
+    <sca:service name="ConverterProxy" promote="CamelServiceRoute/ConverterProxy">
+      <sca:interface.java interface="com.gepardec.examples.switchyard_auditing.ConverterProxy"/>
+      <resteasy:binding.rest name="rest1">
+        <resteasy:interfaces>com.gepardec.examples.switchyard_auditing.ConverterProxyRest</resteasy:interfaces>
+        <resteasy:contextPath>auditingconverter</resteasy:contextPath>
+      </resteasy:binding.rest>
+    </sca:service>
+    <sca:reference name="Converter" multiplicity="0..1" promote="CamelServiceRoute/ConverterProxyExt">
+      <sca:interface.wsdl interface="converter.wsdl#wsdl.porttype(Converter)"/>
+      <soap:binding.soap name="soap1">
+        <soap:wsdl>converter.wsdl</soap:wsdl>
+        <soap:endpointAddress>http://localhost:8080/sy-poc-simulation/Converter</soap:endpointAddress>
+      </soap:binding.soap>
+    </sca:reference>
+  </sca:composite>
+  <sy:transforms>
+    <transform:transform.jaxb from="java:com.gepardec.examples.switchyard_auditing.generated.converter.Convert" to="{http://currencyconverter.simulation.fsw_poc.bva.at/}convert" contextPath="com.gepardec.examples.switchyard_auditing.generated.converter"/>
+    <transform:transform.jaxb from="{http://currencyconverter.simulation.fsw_poc.bva.at/}convertResponse" to="java:com.gepardec.examples.switchyard_auditing.generated.converter.ConvertResponse" contextPath="com.gepardec.examples.switchyard_auditing.generated.converter"/>
+  </sy:transforms>
+  <sy:domain>
+    <sy:securities>
+      <sy:security rolesAllowed="friend"/>
+    </sy:securities>
+  </sy:domain>
+</sy:switchyard>
