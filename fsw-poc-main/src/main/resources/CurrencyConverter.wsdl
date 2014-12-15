@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="CurrencyConverter" targetNamespace="http://currencyconverter.main.fsw_poc.bva.at/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://currencyconverter.main.fsw_poc.bva.at/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<schema xmlns="http://www.w3.org/2001/XMLSchema">
+  <import namespace="http://currencyconverter.main.fsw_poc.bva.at/" schemaLocation="xsd/CurrencyConverter_schema1.xsd"/>
+</schema>
+  </wsdl:types>
+  <wsdl:message name="convert">
+    <wsdl:part name="arg0" element="tns:currencyConverterRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="convertResponse">
+    <wsdl:part name="return" element="tns:currencyConverterResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="CurrencyConverterPortType">
+    <wsdl:operation name="convert">
+      <wsdl:input name="convert" message="tns:convert">
+    </wsdl:input>
+      <wsdl:output name="convertResponse" message="tns:convertResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CurrencyConverterSoapBinding" type="tns:CurrencyConverterPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="convert">
+      <soap:operation soapAction="convert" style="document"/>
+      <wsdl:input name="convert">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="convertResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CurrencyConverter">
+    <wsdl:port name="CurrencyConverterPort" binding="tns:CurrencyConverterSoapBinding">
+      <soap:address location="http://localhost:8080/fsw-poc-main/CurrencyConverter"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

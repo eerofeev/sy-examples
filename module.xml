@@ -1,0 +1,70 @@
+<module xmlns='urn:jboss:module:1.1' name='at.bva.jboss_connectors.eap5'>
+  <resources>
+    <resource-root path='jboss-connectors-0.0.1-SNAPSHOT.jar' />
+	<resource-root path="jbossall-client.jar" />
+      <resource-root path="commons-logging.jar" />
+      <resource-root path="concurrent.jar" />
+      <resource-root path="ejb3-persistence.jar" />
+      <resource-root path="hibernate-annotations.jar" />
+      <resource-root path="hibernate-commons-annotations.jar" />
+      <resource-root path="hibernate-core.jar" />
+      <resource-root path="hibernate-validator.jar" />
+      <!--resource-root path="hornetq-core-client.jar"/-->
+      <!--resource-root path="hornetq-jms-client.jar"/-->
+      <resource-root path="jboss-aop-client.jar" />
+      <resource-root path="jboss-appclient.jar" />
+      <resource-root path="jboss-aspect-jdk50-client.jar" />
+      <resource-root path="jboss-client.jar" />
+      <resource-root path="jboss-common-core.jar" />
+      <resource-root path="jboss-common-beans.jar" />
+      <resource-root path="jboss-deployers-client-spi.jar" />
+      <resource-root path="jboss-deployers-client.jar" />
+      <resource-root path="jboss-deployers-core-spi.jar" />
+      <resource-root path="jboss-deployers-core.jar" />
+      <resource-root path="jboss-deployment.jar" />
+      <resource-root path="jboss-ejb3-common-client.jar" />
+      <resource-root path="jboss-ejb3-core-client.jar" />
+      <resource-root path="jboss-ejb3-ext-api.jar" />
+      <resource-root path="jboss-ejb3-proxy-clustered-client.jar" />
+      <resource-root path="jboss-ejb3-proxy-impl-client.jar" />
+      <resource-root path="jboss-ejb3-proxy-spi-client.jar" />
+      <resource-root path="jboss-ejb3-security-client.jar" />
+      <resource-root path="jboss-ejb3-vfs-spi.jar" />
+      <resource-root path="jboss-ha-client.jar" />
+      <resource-root path="jboss-ha-legacy-client.jar" />
+      <resource-root path="jboss-iiop-client.jar" />
+      <resource-root path="jboss-integration.jar" />
+      <resource-root path="jboss-j2se.jar" />
+      <resource-root path="jboss-javaee.jar" />
+      <resource-root path="jboss-jsr77-client.jar" />
+      <resource-root path="jboss-logging-jdk.jar" />
+      <resource-root path="jboss-logging-log4j.jar" />
+      <resource-root path="jboss-logging-spi.jar" />
+      <resource-root path="jboss-mdr.jar" />
+      <resource-root path="jboss-messaging-client.jar" />
+      <resource-root path="jboss-profileservice-client.jar" />
+      <resource-root path="jboss-remoting.jar" />
+      <resource-root path="jboss-security-spi.jar" />
+      <resource-root path="jboss-serialization.jar" />
+      <resource-root path="jboss-srp-client.jar" />
+      <resource-root path="jboss-system-client.jar" />
+      <resource-root path="jboss-system-jmx-client.jar" />
+      <resource-root path="jbosscx-client.jar" />
+      <resource-root path="jbossjts-integration.jar" />
+      <resource-root path="jbossjts.jar" />
+      <resource-root path="jbosssx-as-client.jar" />
+      <resource-root path="jbosssx-client.jar" />
+      <resource-root path="jmx-client.jar" />
+      <resource-root path="jmx-invoker-adaptor-client.jar" />
+      <resource-root path="jnp-client.jar" />
+      <resource-root path="netty.jar" />
+      <resource-root path="slf4j-api.jar" />
+      <resource-root path="xmlsec.jar" />
+      <resource-root path="slf4j-jboss-logging.jar" />
+      <resource-root path='jboss-connectors-0.0.1-SNAPSHOT.jar' />
+  </resources>
+  <dependencies>
+    <module name='org.slf4j' />
+	<module name="javax.api"/>
+  </dependencies>
+</module>

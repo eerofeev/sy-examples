@@ -1,0 +1,8 @@
+<cur:currencyConverterRequest xmlns:cur="http://currencyconverter.main.fsw_poc.bva.at/">
+	<bic>AS</bic>
+	<amount>1</amount>
+	<!--Optional: -->
+	<currencyCodeFrom>CAD</currencyCodeFrom>
+	<!--Optional: -->
+	<currencyCodeTo>USD</currencyCodeTo>
+</cur:currencyConverterRequest>

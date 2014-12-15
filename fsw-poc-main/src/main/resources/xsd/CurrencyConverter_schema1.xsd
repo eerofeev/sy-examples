@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?><xs:schema xmlns:tns="http://currencyconverter.main.fsw_poc.bva.at/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://currencyconverter.main.fsw_poc.bva.at/">
+	<xs:complexType name="currencyConverterRequest">
+		<xs:sequence>
+			<xs:element name="bic">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:length value="8" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="amount">
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minInclusive value="0" />
+						<xs:maxInclusive value="100" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element> 
+			<xs:element minOccurs="0" name="currencyCodeFrom" type="tns:currencyCode" />
+			<xs:element minOccurs="0" name="currencyCodeTo" type="tns:currencyCode" />
+		</xs:sequence>
+	</xs:complexType>
+  <xs:complexType name="currencyConverterResponse">
+    <xs:sequence>
+	<xs:element name="amount">
+		<xs:simpleType>
+			<xs:restriction base="xs:double">
+				<xs:minInclusive value="0" />
+				<xs:maxInclusive value="100" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element minOccurs="0" name="currencyCode" type="tns:currencyCode" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="currencyCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="EUR"/>
+      <xs:enumeration value="USD"/>
+      <xs:enumeration value="CAD"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="currencyConverterRequest" nillable="true" type="tns:currencyConverterRequest"/>
+  <xs:element name="currencyConverterResponse" nillable="true" type="tns:currencyConverterResponse"/>
+</xs:schema>

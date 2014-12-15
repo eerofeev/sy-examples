@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<jboss-deployment-structure>  
+    <deployment>  
+         <dependencies>  
+              <module name="at.gepardec.jboss_connectors.eap5" />  
+              <!-- module name="org.jboss.ws.cxf.jbossws-cxf-client" />
+              <module name="org.apache.cxf.impl" /--> 
+              <module name="org.apache.ws.security" />
+              <module name="org.apache.cxf.impl" />  
+        </dependencies>
+    </deployment>  
+</jboss-deployment-structure>

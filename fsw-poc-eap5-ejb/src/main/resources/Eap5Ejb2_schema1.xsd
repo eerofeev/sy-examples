@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><xs:schema xmlns="http://eap5ejb2.fsw_poc.bva.at/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://eap5ejb2.fsw_poc.bva.at/">
+  <xs:complexType name="eap5Ejb2Request">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="requestMsg" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="eap5Ejb2Response">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="responseMsg" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="eap5Ejb2Request" nillable="true" type="eap5Ejb2Request"/>
+  <xs:element name="eap5Ejb2Response" nillable="true" type="eap5Ejb2Response"/>
+</xs:schema>

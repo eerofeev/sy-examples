@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Eap5Ejb2" targetNamespace="http://eap5ejb2.fsw_poc.bva.at/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://eap5ejb2.fsw_poc.bva.at/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<schema xmlns="http://www.w3.org/2001/XMLSchema">
+  <import namespace="http://eap5ejb2.fsw_poc.bva.at/" schemaLocation="Eap5Ejb2_schema1.xsd"/>
+</schema>
+  </wsdl:types>
+  <wsdl:message name="m">
+    <wsdl:part name="arg0" element="tns:eap5Ejb2Request">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="mResponse">
+    <wsdl:part name="return" element="tns:eap5Ejb2Response">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Eap5Ejb2PortType">
+    <wsdl:operation name="m">
+      <wsdl:input name="m" message="tns:m">
+    </wsdl:input>
+      <wsdl:output name="mResponse" message="tns:mResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Eap5Ejb2SoapBinding" type="tns:Eap5Ejb2PortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="m">
+      <soap:operation soapAction="m" style="document"/>
+      <wsdl:input name="m">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="mResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Eap5Ejb2">
+    <wsdl:port name="Eap5Ejb2Port" binding="tns:Eap5Ejb2SoapBinding">
+      <soap:address location="http://localhost:8080/fsw-poc-eap5-ejb/Eap5Ejb2"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

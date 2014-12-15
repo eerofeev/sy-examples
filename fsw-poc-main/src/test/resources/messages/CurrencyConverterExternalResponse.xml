@@ -1,0 +1,7 @@
+<ns2:convertResponse
+	xmlns:ns2="http://currencyconverter.simulation.fsw_poc.bva.at/">
+	<converterResponse>
+		<amount>1.3</amount>
+		<currencyCode>USD</currencyCode>
+	</converterResponse>
+</ns2:convertResponse>
