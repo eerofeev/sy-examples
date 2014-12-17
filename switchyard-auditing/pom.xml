@@ -15,76 +15,91 @@
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-bean</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-camel</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-camel-core</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-camel-file</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-camel-ftp</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-http</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-camel-jms</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-camel-jpa</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-camel-mail</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-camel-netty</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-resteasy</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-sca</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-camel-quartz</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-soap</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
 			<artifactId>switchyard-component-camel-sql</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard.components</groupId>
@@ -114,21 +129,25 @@
 			<groupId>org.switchyard</groupId>
 			<artifactId>switchyard-api</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard</groupId>
 			<artifactId>switchyard-transform</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard</groupId>
 			<artifactId>switchyard-validate</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard</groupId>
 			<artifactId>switchyard-plugin</artifactId>
 			<version>${switchyard.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.switchyard</groupId>
@@ -190,6 +209,24 @@
 						</bindingFiles>
 						</configuration>
 					</execution>
+					<execution>
+						<id>hello2</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+						<configuration>
+							<wsdlDirectory>src/main/resources</wsdlDirectory>
+							<wsdlFiles>
+								<wsdlFile>hello2.wsdl</wsdlFile>
+							</wsdlFiles>
+							<packageName>com.gepardec.examples.switchyard_auditing.generated.hello2</packageName>
+						<bindingDirectory>src/main/resources</bindingDirectory>
+						<bindingFiles>
+							<bindingFile>bindings.xml</bindingFile>
+						</bindingFiles>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 
@@ -203,7 +240,7 @@
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
 				</configuration>
-			</plugin>
+			</plugin>     
 		</plugins>
 		<pluginManagement>
 			<plugins>

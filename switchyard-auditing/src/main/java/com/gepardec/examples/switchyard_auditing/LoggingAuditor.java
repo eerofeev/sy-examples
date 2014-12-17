@@ -1,127 +1,86 @@
 package com.gepardec.examples.switchyard_auditing;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.camel.Exchange;
-import org.switchyard.Service;
-import org.switchyard.bus.camel.audit.Auditor;
-import org.switchyard.bus.camel.processors.Processors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class LoggingAuditor implements Auditor{
+public class LoggingAuditor extends SYAuditor{
 	
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target(ElementType.TYPE)
-	public static @interface LoggingAuditorConfig{
-		String endpoint();
-		String[] externalServices();
-	}
+	private static final Logger LOG = LoggerFactory.getLogger(LoggingAuditor.class);
 	
-	public static final String SY_PHASE = "org.switchyard.bus.camel.phase";
-	public static final String SY_PHASE_IN = "IN";
-	public static final String SY_PHASE_OUT = "OUT";
-	public static final String SY_GATEWAY = "org.switchyard.exchangeGatewayName";
-	public static final String SY_PROVIDER = "org.switchyard.bus.camel.provider";
-	public static final String SY_SERVICE = "org.switchyard.serviceName";
-	public static final String SY_OPERATION = "org.switchyard.operationName";
+	protected static SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	protected static SimpleDateFormat timeFormat = new SimpleDateFormat("mm:ss.SSS");
+	protected final static String START_TIME="auditing.time.start";
+	protected final static String EXTERNAL_SERVICE_TIME="auditing.time.external";
 	
-	private String endpointName;
-	private String[] externalServices;
-	
-	public LoggingAuditor() throws IllegalArgumentException {
-		if(!this.getClass().isAnnotationPresent(LoggingAuditorConfig.class)){
-			throw new IllegalArgumentException("LoggingAuditor must be annotated with @LoggingAuditorConfig");
-		}
-		LoggingAuditorConfig loggingAuditorConfig = this.getClass().getAnnotation(LoggingAuditorConfig.class);
-		if(loggingAuditorConfig.endpoint() == null || loggingAuditorConfig.endpoint().isEmpty()){
-			throw new IllegalArgumentException("LoggingAuditorConfig.endpoint can not be empty");
-		}
-		if(loggingAuditorConfig.externalServices() == null || loggingAuditorConfig.externalServices().length == 0){
-			throw new IllegalArgumentException("LoggingAuditorConfig.externalServices can not be empty");
-		}
-		
-		endpointName = loggingAuditorConfig.endpoint();
-		externalServices = loggingAuditorConfig.externalServices();
-	}
-	
-
-	@Override
-	public void beforeCall(Processors processor, Exchange exchange) {
-		if(
-				processor.name().equals(Processors.CONSUMER_INTERCEPT.toString())
-				&& exchange.getProperty(SY_PHASE).toString().equals(SY_PHASE_IN)
-				&& exchange.getProperty(SY_GATEWAY) != null
-				&& exchange.getProperty(SY_GATEWAY).equals(endpointName)
-		){
-			onEndpointEntry(exchange);
-		}
-		
-		if(
-				processor.name().equals(Processors.PROVIDER_CALLBACK.toString())
-				&& exchange.getProperty(SY_PHASE).toString().equals(SY_PHASE_IN)
-				&& exchange.getProperty(SY_PROVIDER) != null
-				&& contains(externalServices, exchange.getProperty(SY_PROVIDER, null, Service.class).getName().getLocalPart())
-		){
-			onExternalServiceCallBegin(exchange.getProperty(SY_PROVIDER, null, Service.class).getName().getLocalPart(), exchange);
-		}
-		
-		//System.out.println("Before " + processor.name() + " # " + propertiesToString(exchange.getProperties()));
-		
+	public LoggingAuditor() {
+		super();
 	}
 
 	@Override
-	public void afterCall(Processors processor, Exchange exchange) {
-		if(
-				processor.name().equals(Processors.CONSUMER_CALLBACK.toString())
-				&& exchange.getProperty(SY_PHASE).toString().equals(SY_PHASE_OUT)
-				&& exchange.getProperty(SY_GATEWAY) != null
-				&& exchange.getProperty(SY_GATEWAY).equals(endpointName)
-		){
-			onEndpointExit(exchange);
-		}
-		
-		if(
-				processor.name().equals(Processors.PROVIDER_CALLBACK.toString())
-				&& exchange.getProperty(SY_PHASE).toString().equals(SY_PHASE_OUT)
-				&& exchange.getProperty(SY_PROVIDER) != null
-				&& contains(externalServices, exchange.getProperty(SY_PROVIDER, null, Service.class).getName().getLocalPart())
-		){
-			onExternalServiceCallEnd(exchange.getProperty(SY_PROVIDER, null, Service.class).getName().getLocalPart(), exchange);
-		}
+	public void onEndpointEntry(Exchange exchange) {
+		exchange.setProperty(START_TIME, System.currentTimeMillis());
+	}
 
-		//System.out.println("Before " + processor.name() + " # " + propertiesToString(exchange.getProperties()));
+	@Override
+	public void onEndpointExit(Exchange exchange) {
+		long startTime = exchange.getProperty(START_TIME, 0.0, Long.class);
+		long commonTime = System.currentTimeMillis() - startTime;
+		long externalTime = exchange.getProperty(EXTERNAL_SERVICE_TIME, 0.0, Long.class);
+		long serviceTime = commonTime - externalTime;
 		
-	}
-	
-	public abstract void onEndpointEntry(Exchange exchange);
-	public abstract void onEndpointExit(Exchange exchange);
-	public abstract void onExternalServiceCallBegin(String serviceName, Exchange exchange);
-	public abstract void onExternalServiceCallEnd(String serviceName, Exchange exchange);
-	
-	public static boolean contains(String [] samples, String toCheck){
-		
-		for(int i = 0; i < samples.length; i++){
-			if(toCheck.equals(samples[i])){
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	private static String propertiesToString(Map<String, Object> properties){
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(System.getProperty("line.separator"));
-		buffer.append("################### >>> PROPERTIES ################");
+		buffer.append("################### >>> SERVICE CALL ################");
+		
 		buffer.append(System.getProperty("line.separator"));
-		for(String key : properties.keySet()){
-			buffer.append("		").append(key).append(" :: ").append(properties.get(key)).append(System.getProperty("line.separator"));
-		}
-		buffer.append("################### <<< END PROPERTIES ################");
+		buffer.append("		").append("Call time").append(" :: ").append(timestampFormat.format(new Date(startTime)));
+		
 		buffer.append(System.getProperty("line.separator"));
-		return buffer.toString();
+		buffer.append("		").append("Service").append(" :: ").append(exchange.getProperty(SYAUDITOR_SERVICE_NAME));
+
+		buffer.append(System.getProperty("line.separator"));
+		buffer.append("		").append("Operation").append(" :: ").append(exchange.getProperty(SY_OPERATION));
+		
+		buffer.append(System.getProperty("line.separator"));
+		buffer.append("		").append("Service execution duration").append(" :: ").append(timeFormat.format(new Date(serviceTime)));
+		
+		buffer.append(System.getProperty("line.separator"));
+		buffer.append("		").append("External calls duration").append(" :: ").append(timeFormat.format(new Date(externalTime)));
+		
+		buffer.append(System.getProperty("line.separator"));
+		buffer.append("		").append("Common call duration").append(" :: ").append(timeFormat.format(new Date(commonTime)));
+		
+		buffer.append(System.getProperty("line.separator"));		
+		buffer.append("------------------- IN PAYLOAD -------------------");
+		buffer.append(System.getProperty("line.separator"));
+		buffer.append(exchange.getProperty(SYAUDITOR_IN_PAYLOAD));
+		
+		buffer.append(System.getProperty("line.separator"));		
+		buffer.append("------------------- OUT PAYLOAD -------------------");
+		buffer.append(System.getProperty("line.separator"));
+		buffer.append(exchange.getProperty(SYAUDITOR_OUT_PAYLOAD));
+		
+		buffer.append(System.getProperty("line.separator"));		
+		buffer.append("################### <<< SERVICE CALL ################");
+		buffer.append(System.getProperty("line.separator"));
+		LOG.info(buffer.toString());
+		
 	}
+
+	@Override
+	public void onExternalServiceCallBegin(String serviceName, Exchange exchange) {
+		long currentExternal = exchange.getProperty(EXTERNAL_SERVICE_TIME, 0.0, Long.class);
+		exchange.setProperty(EXTERNAL_SERVICE_TIME, System.currentTimeMillis() - currentExternal);
+	}
+
+	@Override
+	public void onExternalServiceCallEnd(String serviceName, Exchange exchange) {
+		long currentExternal = exchange.getProperty(EXTERNAL_SERVICE_TIME, 0.0, Long.class);
+		exchange.setProperty(EXTERNAL_SERVICE_TIME, System.currentTimeMillis() - currentExternal);
+	}
+
 }
