@@ -1,0 +1,26 @@
+[
+  {
+    "name": "BVAIP",
+    "version": "1",
+    "typeProcessors": {
+      "com.gepardec.examples.switchyard_auditing.generated.converter.Convert": {
+        "properties": [
+          {
+            "name": "from",
+            "evaluator": {
+              "type": "mvel",
+              "expression": "converterRequest.currencyCodeFrom"
+            }
+          },
+          {
+            "name": "to",
+            "evaluator": {
+              "type": "mvel",
+              "expression": "converterRequest.currencyCodeTo"
+            }
+          }
+        ]
+      }
+    }
+  }
+]
