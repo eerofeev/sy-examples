@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="Hello2" soapui-version="5.0.0" abortOnError="false" runType="SEQUENTIAL" resourceRoot="" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="Hello2SoapBinding" type="wsdl" bindingName="{http://hello2.simulation.fsw_poc.bva.at/}Hello2SoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/switchyard-auditing/Hello2?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/switchyard-auditing/Hello2?wsdl"><con:part><con:url>http://localhost:8080/switchyard-auditing/Hello2?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="Hello2" targetNamespace="http://hello2.simulation.fsw_poc.bva.at/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://hello2.simulation.fsw_poc.bva.at/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://hello2.simulation.fsw_poc.bva.at/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="sayHello2" type="tns:sayHello2"/>
+      <xs:element name="sayHello2Response" type="tns:sayHello2Response"/>
+      <xs:complexType name="sayHello2">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Hello2Request" type="tns:hello2Request"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="hello2Request">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="value" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="sayHello2Response">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Hello2Response" type="tns:hello2Response"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="hello2Response">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="value" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="sayHello2">
+    <wsdl:part element="tns:sayHello2" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sayHello2Response">
+    <wsdl:part element="tns:sayHello2Response" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Hello2">
+    <wsdl:operation name="sayHello2">
+      <wsdl:input message="tns:sayHello2" name="sayHello2"></wsdl:input>
+      <wsdl:output message="tns:sayHello2Response" name="sayHello2Response"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Hello2SoapBinding" type="tns:Hello2">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="sayHello2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="sayHello2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sayHello2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Hello2">
+    <wsdl:port binding="tns:Hello2SoapBinding" name="Hello2ImplPort">
+      <soap:address location="http://localhost:8080/switchyard-auditing/Hello2"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/switchyard-auditing/Hello2</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="sayHello2" bindingOperationName="sayHello2" type="Request-Response" outputName="sayHello2Response" inputName="sayHello2" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/switchyard-auditing/Hello2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tns:sayHello2 xmlns:tns="http://hello2.simulation.fsw_poc.bva.at/">
+         <!--Optional:-->
+         <Hello2Request>
+            <!--Optional:-->
+            <value>Egor!</value>
+         </Hello2Request>
+      </tns:sayHello2>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:username>kermit</con:username><con:password>the-frog-1</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://hello2.simulation.fsw_poc.bva.at/Hello2/sayHello2"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/></con:soapui-project>
