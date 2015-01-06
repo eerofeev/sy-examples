@@ -52,6 +52,7 @@
     <sca:service name="Hello2" promote="Hello2Proxy/Hello2Proxy">
       <sca:interface.wsdl interface="hello2.wsdl#wsdl.porttype(Hello2)"/>
       <soap:binding.soap name="soap1">
+        <soap:messageComposer class="com.gepardec.examples.switchyard_auditing.hello2.Hello2SoapMessageComposer"/>
         <soap:wsdl>hello2.wsdl</soap:wsdl>
         <soap:contextPath>switchyard-auditing</soap:contextPath>
       </soap:binding.soap>
