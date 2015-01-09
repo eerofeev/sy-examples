@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sy:switchyard xmlns:bean="urn:switchyard-component-bean:config:1.1" xmlns:camel="urn:switchyard-component-camel:config:1.1" xmlns:http="urn:switchyard-component-http:config:1.1" xmlns:resteasy="urn:switchyard-component-resteasy:config:1.1" xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912" xmlns:soap="urn:switchyard-component-soap:config:1.1" xmlns:sy="urn:switchyard-config:switchyard:1.1" xmlns:transform="urn:switchyard-config:transform:1.1" name="switchyard-wss" targetNamespace="http://switchyard_wss.examples.gepardec.com/">
+  <sca:composite name="switchyard-wss" targetNamespace="http://switchyard_wss.examples.gepardec.com/">
+    <sca:component name="HelloBean">
+      <bean:implementation.bean requires="authorization" class="com.gepardec.examples.testwss.HelloBean"/>
+      <sca:service name="Hello" requires="clientAuthentication">
+        <sca:interface.java interface="com.gepardec.examples.testwss.HelloProxy"/>
+      </sca:service>
+    </sca:component>
+    <sca:service name="HelloPortType" promote="HelloBean/Hello">
+      <sca:interface.wsdl interface="hello.wsdl#wsdl.porttype(HelloPortType)"/>
+      <soap:binding.soap name="soap1">
+        <soap:wsdl>hello-sec.wsdl</soap:wsdl>
+        <soap:wsdlPort>HelloPort</soap:wsdlPort>
+        <soap:contextPath>testwsshello</soap:contextPath>
+        <soap:endpointConfig configFile="META-INF/jaxws-endpoint-config.xml" configName="SwitchYard-Endpoint-Config"/>
+        <soap:inInterceptors>
+          <soap:interceptor class="org.jboss.wsf.stack.cxf.security.authentication.SubjectCreatingPolicyInterceptor"/>
+        </soap:inInterceptors>
+      </soap:binding.soap>
+    </sca:service>
+  </sca:composite>
+  <sy:transforms>
+    <transform:transform.jaxb from="java:com.gepardec.examples.testwss.generated.hello.SayHelloResponse" to="{http://testwss.examples.gepardec.com/}sayHelloResponse" contextPath="com.gepardec.examples.testwss.generated.hello"/>
+    <transform:transform.jaxb from="{http://testwss.examples.gepardec.com/}sayHello" to="java:com.gepardec.examples.testwss.generated.hello.SayHello" contextPath="com.gepardec.examples.testwss.generated.hello"/>
+  </sy:transforms>
+  <sy:domain>
+    <sy:securities>
+      <sy:security rolesAllowed="friend"/>
+    </sy:securities>
+  </sy:domain>
+</sy:switchyard>

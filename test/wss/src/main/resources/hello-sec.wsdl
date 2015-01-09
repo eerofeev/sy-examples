@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Hello" targetNamespace="http://testwss.examples.gepardec.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://testwss.examples.gepardec.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsp="http://www.w3.org/ns/ws-policy"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:wsaws="http://www.w3.org/2005/08/addressing" xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://testwss.examples.gepardec.com/" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://testwss.examples.gepardec.com/">
+  <xsd:element name="sayHello" type="tns:sayHello"/>
+  <xsd:complexType name="sayHello">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="string" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="sayHelloResponse" type="tns:sayHelloResponse"/>
+  <xsd:complexType name="sayHelloResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="string" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="sayHelloResponse">
+    <wsdl:part name="parameters" element="tns:sayHelloResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sayHello">
+    <wsdl:part name="parameters" element="tns:sayHello">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="HelloPortType">
+    <wsdl:operation name="sayHello">
+      <wsdl:input name="sayHello" message="tns:sayHello">
+    </wsdl:input>
+      <wsdl:output name="sayHelloResponse" message="tns:sayHelloResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="HelloSoapBinding" type="tns:HelloPortType">
+  <wsp:PolicyReference URI="#SecurityServiceBindingPolicy" />
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="sayHello">
+      <soap:operation soapAction="sayHello" style="document"/>
+      <wsdl:input name="sayHello">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sayHelloResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Hello">
+    <wsdl:port name="HelloPort" binding="tns:HelloSoapBinding">
+      <soap:address location="http://localhost:8080/switchyard-wss/Hello"/>
+    </wsdl:port>
+  </wsdl:service>
+  	<wsp:Policy wsu:Id="SecurityServiceBindingPolicy">
+		<wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SupportingTokens xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702">
+          <wsp:Policy>
+            <sp:UsernameToken sp:IncludeToken="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702/IncludeToken/AlwaysToRecipient">
+              <wsp:Policy>
+                <sp:WssUsernameToken10/>
+              </wsp:Policy>
+            </sp:UsernameToken>
+          </wsp:Policy>
+        </sp:SupportingTokens>
+      </wsp:All>
+    </wsp:ExactlyOne>
+	</wsp:Policy>
+</wsdl:definitions>

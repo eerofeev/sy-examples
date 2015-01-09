@@ -1,4 +1,4 @@
-package com.gepardec.examples.switchyard_auditing;
+package com.gepardec.examples.testwssclient.auditing;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -99,6 +99,9 @@ public abstract class SYAuditor implements Auditor{
 	@Override
 	public void afterCall(Processors processor, Exchange exchange) {
 		
+		//System.out.println(this.getClass().getName() + " After " + processor.name() + " # " + propertiesToString(exchange.getProperties()));
+		
+		
 		if(processor.name().equals(Processors.SECURITY_PROCESS.toString())){
 			Subject s = ((org.switchyard.security.context.SecurityContext)exchange.getProperty("org.switchyard.security.context.SecurityContext")).getSubject("other");
 			exchange.setProperty(SYAUDITOR_PRINCIPAL, s);
@@ -116,6 +119,7 @@ public abstract class SYAuditor implements Auditor{
 			//System.out.println("After " + processor.name() + " # " + propertiesToString(exchange.getProperties()));
 			exchange.setProperty(SYAUDITOR_OUT_PAYLOAD, exchange.getIn().toString());
 			onEndpointExit(exchange);
+			exchange.removeProperty(SYAUDITOR_ENDPOINT_NAME);
 		}
 		
 		if(
@@ -129,7 +133,7 @@ public abstract class SYAuditor implements Auditor{
 			onExternalServiceCallEnd(exchange.getProperty(SY_PROVIDER, null, Service.class).getName().getLocalPart(), exchange);
 		}
 
-		//System.out.println(this.getClass().getName() + " After " + processor.name() + " # " + propertiesToString(exchange.getProperties()));
+		
 		
 	}
 	

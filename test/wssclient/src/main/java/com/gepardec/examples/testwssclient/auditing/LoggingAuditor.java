@@ -1,4 +1,4 @@
-package com.gepardec.examples.switchyard_auditing;
+package com.gepardec.examples.testwssclient.auditing;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

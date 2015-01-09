@@ -62,7 +62,7 @@
          <!--Optional:-->
          <Hello2Request>
             <!--Optional:-->
-            <value>Egor!</value>
+            <value>Egor</value>
          </Hello2Request>
       </tns:sayHello2>
    </soapenv:Body>

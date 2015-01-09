@@ -1,0 +1,83 @@
+WSS
+
+1)WS mit WSS absichern
+	-) Hello Service erstellen (Java -> WSDL -> Java)
+	-) Kopie der WSDL mit policies ergänzen (+ WSS namespaces)
+	-) WSDL in Binding durch hello-sec ersetzen
+	-) jaxws-endpoint-config.xml konfigurieren
+	-) in SOAP-Binding Endpoint Configuration anpassen
+	-) in SOAP-Binding Inbound Interceptors Configurieren (org.jboss.wsf.stack.cxf.security.authentication.SubjectCreatingPolicyInterceptor)
+	-) Security wie immer konfigurieren
+2)Ein abgesichertes Service aufrufen
+	-) Normalen WS-Client Erstellen (Auf basis von WSDL ohne WS-Security - Ausgehende WSDL von allen WSS-Einträgen reinigen)
+	-) Custom message composer definieren
+	-) Im Composer Password-Encryption anpassen
+	-) Ausgehende Soap-Binding gegen Composer konfigurieren
+
+
+*************************************************************************************
+MONITORING
+	
+	Für die Sammlung von Aktivitätendaten gibt es RTGovServer. Alle Daten werden in der DB gespeichert. In Produktion muss natürlich ein separater Server mit der DB verwendet werden. Für die Evaluirung reicht es, wenn wir einen eingebauten Server verwenden.
+
+	-) Activity Collector einschalten $FSW_HOME/standalone/overlord-rtgov.properties collectionEnabled=true
+	-) Probieren, die DB für ein gewisses Service abzufragen (SOAP-UI, http://currentmillis.com/)
+	-) Hilfsklassen von ReportBuilder kopieren.
+	-) Ein Rest-Service für Abfrage erstellen
+
+**************************************************************************************
+
+AUDITING
+	-) Möglicherweise wssclient ergänzen
+	-) Ein allgemeiner SYAuditor mit mappings von PROZESSOR-NAME an Ereignis
+		-) Extend ein SY-Interface Auditor. Das ist ein Interceptor, der auf verschidenen Phasen der Aufrufkette aufgerufen wird.
+		-) Gewisse Phasen können auf entsprechende logische Ereignisse gemapped werden (Aufrufanfang, Aufrufende, Anfang/Ende des Aufrunfs von externen Service)
+		-) Wir können solche Ereignisse fangen, indem wir callbacks auf ensprechenden Phasen fürs Zielservice aufrufen.
+		-) Zwei Methoden: beforeCall, afterCall
+			- Processor definiert die Phase (z.B CONSUMER_INTERCEPT, vor dem Aufruf des Services)
+			- Exchange repräsentiert Exchange-Headers and Body. ! Gleiche Instanz für gleiche Services => Auditing möglich
+		-) Falls alle Voraussetzungen erfüllt sind, wird es callback aufgerufen mit exchange.
+	-) Logging Auditor zur Ausgabe von service-daten
+	-) Individuell konfigurierte Auditors für jedes Endpoint/Binding
+	-) Externe services können berücksichtigt werden, nur wenn Implementierungen Camel sind
+	-) User kann teoretisch aus ((org.switchyard.security.context.SecurityContext)exchange.getProperty("org.switchyard.security.context.SecurityContext")).getCredentials() extrahiert werden, wenn das Service abgesichert ist.
+	-) Credentials sind nur mit aktiver Security sichtbar
+
+
+***************************************************************************************
+
+VALIDIERUNG
+	-) Hello Service erstellen (WSS Client kopieren)
+	-) XSD extrahieren
+	-) In XSD ein element anpassen mit Restriction
+	-) XML Validator hinzufügen -- Namespace Aware muss aktiv sein (! Name aus der Liste nehmen. Um zu deaktivieren, einen einfachen Namen geben, wie z.B. "disabled")
+
+	-) Deaktivieren XML Validator
+	-) MyValidationResult-Klasse hinzufügen
+	-) Einen Java-Validator hinzufügen, den Validatornamen anpassen
+
+ERROR HANDLING
+ - Mit JAVA-Implementierung, Variante Fehler Header in DTO (Wir liefern das DTO mit ErrorCode und ErrorDesc)
+	-) Hello Service erstellen mit error headers(Java -> WSDL -> Java)
+	-) Java Bean + Implementierungsbean
+	-) Throw exception in ImplBean und diese in Bean fangen
+ - Mit Custom SOAPFault
+	-) Eigene Exception hinzufügen
+	-) Eine alternative Methode in JavaBean die unsere eigene Exception Wirft
+	-) Es muss ein SOAP:server fault geben
+	-) Eigenen MessageComposer zur Faultbearbeitung hinzufügen
+
+ - Mit Camel-Implementierung, Variante Fehler Header in DTO (Wir liefern das DTO mit ErrorCode und ErrorDesc)
+	-) Camel implementierung hinzufügen
+	-) Throw exception in ImplBean und diese in Camel fangen, + BusinessObject gegen Fehler bauen
+
+ - Mit Camel-Implementierung, Variante Custom SOAPFault
+	-) Eigene Exception hinzufügen
+	-) Eine alternative Methode in JavaBean die unsere eigene Exception Wirft
+	-) Es muss ein SOAP:server fault geben
+	-) Eigenen MessageComposer zur Faultbearbeitung hinzufügen
+Validierung
+Fehlerbehebung
+https://access.redhat.com/solutions/1137283
+Camel Exception Handling https://access.redhat.com/solutions/1128903
+

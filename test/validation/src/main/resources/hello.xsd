@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://testwss.examples.gepardec.com/" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://testwss.examples.gepardec.com/">
+  <xsd:element name="sayHello" type="tns:sayHello"/>
+  <xsd:complexType name="sayHello">
+    <xsd:sequence>
+		<xsd:element name="string">
+			<xsd:simpleType>
+				<xsd:annotation>
+					<xsd:documentation>2-chars min, alphanum</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="2" />
+					<xsd:pattern value="[a-zA-Z0-9]+" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="sayHelloResponse" type="tns:sayHelloResponse"/>
+  <xsd:complexType name="sayHelloResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="string" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

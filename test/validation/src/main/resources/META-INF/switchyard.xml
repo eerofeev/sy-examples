@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sy:switchyard xmlns:bean="urn:switchyard-component-bean:config:1.1" xmlns:camel="urn:switchyard-component-camel:config:1.1" xmlns:http="urn:switchyard-component-http:config:1.1" xmlns:resteasy="urn:switchyard-component-resteasy:config:1.1" xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912" xmlns:soap="urn:switchyard-component-soap:config:1.1" xmlns:sy="urn:switchyard-config:switchyard:1.1" xmlns:transform="urn:switchyard-config:transform:1.1" xmlns:validate="urn:switchyard-config:validate:1.1" name="switchyard-validation" targetNamespace="http://switchyard_wss.examples.gepardec.com/">
+  <sca:composite name="switchyard-validation" targetNamespace="http://switchyard_wss.examples.gepardec.com/">
+    <sca:component name="HelloValidation">
+      <camel:implementation.camel>
+        <camel:java class="com.gepardec.examples.testvalidation.CamelServiceRoute"/>
+      </camel:implementation.camel>
+      <sca:service name="HelloValidation">
+        <sca:interface.java interface="com.gepardec.examples.testvalidation.HelloProxy"/>
+      </sca:service>
+      <sca:reference name="HelloWSSClientExt">
+        <sca:interface.java interface="com.gepardec.examples.testvalidation.HelloProxy"/>
+      </sca:reference>
+    </sca:component>
+    <sca:service name="HelloValidation" promote="HelloValidation/HelloValidation">
+      <sca:interface.wsdl interface="hello.wsdl#wsdl.porttype(HelloPortType)"/>
+      <soap:binding.soap name="soap1">
+        <soap:wsdl>hello.wsdl</soap:wsdl>
+        <soap:contextPath>testvalidation</soap:contextPath>
+      </soap:binding.soap>
+    </sca:service>
+    <sca:reference name="HelloWSSClientExt" multiplicity="0..1" promote="HelloValidation/HelloWSSClientExt">
+      <sca:interface.wsdl interface="hello.wsdl#wsdl.porttype(HelloPortType)"/>
+      <soap:binding.soap name="soap1">
+        <soap:messageComposer class="com.gepardec.examples.testvalidation.SoapWssMessageComposer"/>
+        <soap:wsdl>hello.wsdl</soap:wsdl>
+        <soap:endpointAddress>http://localhost:8080/testwsshello/Hello</soap:endpointAddress>
+      </soap:binding.soap>
+    </sca:reference>
+  </sca:composite>
+  <sy:transforms>
+    <transform:transform.jaxb from="java:com.gepardec.examples.testvalidation.generated.hello.SayHello" to="{http://testwss.examples.gepardec.com/}sayHello" contextPath="com.gepardec.examples.testvalidation.generated.hello"/>
+    <transform:transform.jaxb from="java:com.gepardec.examples.testvalidation.generated.hello.SayHelloResponse" to="{http://testwss.examples.gepardec.com/}sayHelloResponse" contextPath="com.gepardec.examples.testvalidation.generated.hello"/>
+    <transform:transform.jaxb from="{http://testwss.examples.gepardec.com/}sayHello" to="java:com.gepardec.examples.testvalidation.generated.hello.SayHello" contextPath="com.gepardec.examples.testvalidation.generated.hello"/>
+    <transform:transform.jaxb from="{http://testwss.examples.gepardec.com/}sayHelloResponse" to="java:com.gepardec.examples.testvalidation.generated.hello.SayHelloResponse" contextPath="com.gepardec.examples.testvalidation.generated.hello"/>
+  </sy:transforms>
+  <sy:validates>
+    <validate:validate.xml name="disable" schemaType="XML_SCHEMA" namespaceAware="true">
+      <validate:schemaFiles>
+        <validate:entry file="hello.xsd"/>
+      </validate:schemaFiles>
+    </validate:validate.xml>
+    <validate:validate.java name="{http://testwss.examples.gepardec.com/}sayHello" bean="HelloValidator"/>
+  </sy:validates>
+  <sy:domain>
+    <sy:securities>
+      <sy:security rolesAllowed="friend"/>
+    </sy:securities>
+  </sy:domain>
+</sy:switchyard>
